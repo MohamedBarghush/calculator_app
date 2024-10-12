@@ -25,7 +25,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final HistoryNotifier historyNotifier = HistoryNotifier();
-  bool isDark = true;
   String valToCalculate = ""; // Initialize this variable
   bool showingResult = false; // Added to manage result state
 
@@ -75,7 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState () {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    final bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return MaterialApp(
       title: 'Calculator',
       theme: _buildLightTheme(),
@@ -86,7 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
         isDark: isDark,
         valToCalculate: valToCalculate,
         historyNotifier: historyNotifier,
-        onThemeToggle: () => setState(() => isDark = !isDark),
         onNumberPress: addNumber,
         onOperatorPress: addOperator,
         onClear: clear,
@@ -130,7 +136,6 @@ class CalculatorScaffold extends StatelessWidget {
   final bool isDark;
   final String valToCalculate;
   final HistoryNotifier historyNotifier;
-  final VoidCallback onThemeToggle;
   final Function(int) onNumberPress;
   final Function(String) onOperatorPress;
   final VoidCallback onClear;
@@ -141,7 +146,6 @@ class CalculatorScaffold extends StatelessWidget {
     required this.isDark,
     required this.valToCalculate,
     required this.historyNotifier,
-    required this.onThemeToggle,
     required this.onNumberPress,
     required this.onOperatorPress,
     required this.onClear,
@@ -156,12 +160,6 @@ class CalculatorScaffold extends StatelessWidget {
         title: const Text("CALCULATOR", style: DEFAULT_TEXT_STYLE),
         actions: [
           IconButton(
-            icon: isDark ? const Icon(Icons.dark_mode) : const Icon(Icons.dark_mode_outlined),
-            iconSize: 40,
-            color: Colors.white,
-            onPressed: onThemeToggle,
-          ),
-          IconButton(
             icon: const Icon(Icons.history),
             iconSize: 40,
             color: Colors.white,
@@ -169,18 +167,22 @@ class CalculatorScaffold extends StatelessWidget {
           ),
         ],
       ),
-      body: AspectRatio(
-        aspectRatio: 1 / 1.25,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              _buildDisplayArea(context),
-              const SizedBox(height: 10),
-              _buildButtonGrid(),
-            ],
+      body: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1 / 1.25,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  _buildDisplayArea(context),
+                  const SizedBox(height: 10),
+                  _buildButtonGrid(),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

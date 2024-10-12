@@ -59,14 +59,6 @@ class HistoryPageState extends State<HistoryPage> with SingleTickerProviderState
                 itemCount: widget.historyNotifier.historyTiles.length,);
             }
           ),
-          // Visibility(
-          //   visible: true,
-          //   child: Container(
-          //     decoration: const BoxDecoration(
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // ),
         ]
       ),
     );
